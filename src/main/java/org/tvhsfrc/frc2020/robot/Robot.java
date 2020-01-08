@@ -9,7 +9,10 @@ package org.tvhsfrc.frc2020.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -26,13 +29,13 @@ public class Robot extends TimedRobot
 
     private RobotContainer robotContainer;
 
+
     /**
      * This method is run when the robot is first started up and should be used for any
      * initialization code.
      */
     @Override
-    public void robotInit()
-    {
+    public void robotInit() {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
@@ -94,6 +97,7 @@ public class Robot extends TimedRobot
     @Override
     public void teleopInit()
     {
+
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
@@ -103,9 +107,8 @@ public class Robot extends TimedRobot
             autonomousCommand.cancel();
         }
     }
-
     // Define the joystick
-    Joystick stick = new Joystick(0);
+    public Joystick stick = new Joystick(0);
 
     // Define the talons for the motors
     //TODO: Figure out what the actual ports/ device number
@@ -114,12 +117,16 @@ public class Robot extends TimedRobot
     WPI_TalonSRX LRTalon = new WPI_TalonSRX(3);
     WPI_TalonSRX RRTalon = new WPI_TalonSRX(4);
 
+    SpeedControllerGroup left = new SpeedControllerGroup(LFTalon, LRTalon);
+    SpeedControllerGroup right = new SpeedControllerGroup(RFTalon, RRTalon);
+
+    DifferentialDrive drive = new DifferentialDrive(left, right);
     /**
      * This method is called periodically during operator control.
      */
     @Override
     public void teleopPeriodic() {
-
+        drive.arcadeDrive(stick.getRawAxis(1), stick.getRawAxis(2));
     }
 
     @Override
@@ -135,5 +142,9 @@ public class Robot extends TimedRobot
     @Override
     public void testPeriodic()
     {
+    }
+
+    public void getJoystickX(){
+
     }
 }

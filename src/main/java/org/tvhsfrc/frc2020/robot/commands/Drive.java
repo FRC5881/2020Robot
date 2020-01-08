@@ -18,4 +18,12 @@ public class Drive extends CommandBase {
         this.subsystem = subsystem;
         addRequirements(subsystem);
     }
+
+    /**
+     * Everytime drive is run execute is run as well
+     */
+    @Override
+    public void execute() {
+
+    }
 }
