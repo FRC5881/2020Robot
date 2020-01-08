@@ -7,6 +7,8 @@
 
 package org.tvhsfrc.frc2020.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -102,12 +104,22 @@ public class Robot extends TimedRobot
         }
     }
 
+    // Define the joystick
+    Joystick stick = new Joystick(0);
+
+    // Define the talons for the motors
+    //TODO: Figure out what the actual ports/ device number
+    WPI_TalonSRX LFTalon = new WPI_TalonSRX(1);
+    WPI_TalonSRX RFTalon = new WPI_TalonSRX(2);
+    WPI_TalonSRX LRTalon = new WPI_TalonSRX(3);
+    WPI_TalonSRX RRTalon = new WPI_TalonSRX(4);
+
     /**
      * This method is called periodically during operator control.
      */
     @Override
-    public void teleopPeriodic()
-    {
+    public void teleopPeriodic() {
+
     }
 
     @Override
