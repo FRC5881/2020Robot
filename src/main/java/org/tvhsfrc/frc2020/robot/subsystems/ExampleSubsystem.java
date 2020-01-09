@@ -9,14 +9,15 @@ package org.tvhsfrc.frc2020.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-
+/**
+ * This is an example subsystem (hence the name)
+ */
 public class ExampleSubsystem extends SubsystemBase
 {
     /**
      * Creates a new ExampleSubsystem.
      */
-    public ExampleSubsystem()
-    {
+    public ExampleSubsystem() {
         
     }
     
@@ -24,8 +25,7 @@ public class ExampleSubsystem extends SubsystemBase
      * Will be called periodically whenever the CommandScheduler runs.
      */
     @Override
-    public void periodic()
-    {
+    public void periodic() {
 
     }
 }

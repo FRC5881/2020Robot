@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -23,8 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot
-{
+public class Robot extends TimedRobot {
     private Command autonomousCommand;
 
     private RobotContainer robotContainer;
@@ -49,8 +47,7 @@ public class Robot extends TimedRobot
      * LiveWindow and SmartDashboard integrated updating.
      */
     @Override
-    public void robotPeriodic()
-    {
+    public void robotPeriodic() {
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -62,21 +59,21 @@ public class Robot extends TimedRobot
      * This method is called once each time the robot enters Disabled mode.
      */
     @Override
-    public void disabledInit()
-    {
+    public void disabledInit() {
     }
 
+    /**
+     * This method is called periodically when the robot is in disabled mode.
+     */
     @Override
-    public void disabledPeriodic()
-    {
+    public void disabledPeriodic() {
     }
 
     /**
      * This autonomous runs the autonomous command selected by your {@link RobotContainer} class.
      */
     @Override
-    public void autonomousInit()
-    {
+    public void autonomousInit() {
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)
@@ -90,13 +87,14 @@ public class Robot extends TimedRobot
      * This method is called periodically during autonomous.
      */
     @Override
-    public void autonomousPeriodic()
-    {
+    public void autonomousPeriodic() {
     }
 
+    /**
+     * This method is called when the robot first enters teleop mode.
+     */
     @Override
-    public void teleopInit()
-    {
+    public void teleopInit() {
 
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
@@ -107,31 +105,41 @@ public class Robot extends TimedRobot
             autonomousCommand.cancel();
         }
     }
-    // Define the joystick
+
+    // Define the joystick.
     public Joystick stick = new Joystick(0);
 
-    // Define the talons for the motors
-    //TODO: Figure out what the actual ports/ device number
-    WPI_TalonSRX LFTalon = new WPI_TalonSRX(1);
-    WPI_TalonSRX RFTalon = new WPI_TalonSRX(2);
-    WPI_TalonSRX LRTalon = new WPI_TalonSRX(3);
-    WPI_TalonSRX RRTalon = new WPI_TalonSRX(4);
+    // Define the talons (which control the motors) so we can access them in the future.
+    // TODO: Figure out what the actual ports/ device number
+    WPI_TalonSRX leftFrontTalon = new WPI_TalonSRX(1);
+    WPI_TalonSRX leftRearTalon = new WPI_TalonSRX(3);
+    WPI_TalonSRX rightFrontTalon = new WPI_TalonSRX(2);
+    WPI_TalonSRX rightRearTalon = new WPI_TalonSRX(4);
 
-    SpeedControllerGroup left = new SpeedControllerGroup(LFTalon, LRTalon);
-    SpeedControllerGroup right = new SpeedControllerGroup(RFTalon, RRTalon);
+    /**
+     * These "SpeedControllerGroups" have the two drive motors from each side in them, one for the left and one for the
+     * right. This is done because the "differentialDrive" group only takes two motors/ speedControllers.
+     */
+    SpeedControllerGroup left = new SpeedControllerGroup(leftFrontTalon, leftRearTalon);
+    SpeedControllerGroup right = new SpeedControllerGroup(rightFrontTalon, rightRearTalon);
 
+    // This is the "control group" for the drive motors.
     DifferentialDrive drive = new DifferentialDrive(left, right);
+
     /**
      * This method is called periodically during operator control.
      */
     @Override
     public void teleopPeriodic() {
+        // This takes the raw values from the joystick and runs the drive motors accordingly
         drive.arcadeDrive(stick.getRawAxis(1), stick.getRawAxis(2));
     }
 
+    /**
+     * This method is run when the robot first enters test mode.
+     */
     @Override
-    public void testInit()
-    {
+    public void testInit() {
         // Cancels all running commands at the start of test mode.
         CommandScheduler.getInstance().cancelAll();
     }
@@ -140,11 +148,6 @@ public class Robot extends TimedRobot
      * This method is called periodically during test mode.
      */
     @Override
-    public void testPeriodic()
-    {
-    }
-
-    public void getJoystickX(){
-
+    public void testPeriodic() {
     }
 }
