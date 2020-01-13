@@ -24,13 +24,13 @@ public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
     // This "defines" the example subsystem so it can be easily run from within this class
-    private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
+    private static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
     // This "defines" the example command so it can be easily run from within this class
-    private final ExampleCommand autonomousCommand = new ExampleCommand(exampleSubsystem);
+    private static final ExampleCommand autonomousCommand = new ExampleCommand(exampleSubsystem);
 
     // This "defines" the intake subsystem so it can be easily run from within this class
-    private final Intake intake = new Intake();
+    public static final Intake intake = new Intake();
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -47,7 +47,7 @@ public class RobotContainer {
      * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton JoystickButton}.
      */
     private void configureButtonBindings() {
-        
+        // TODO: Figure out what axis type is which
     }
 
     /**
