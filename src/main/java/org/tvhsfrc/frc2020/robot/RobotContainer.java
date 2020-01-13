@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.tvhsfrc.frc2020.robot.commands.ExampleCommand;
-import org.tvhsfrc.frc2020.robot.subsystems.Drive;
 import org.tvhsfrc.frc2020.robot.subsystems.ExampleSubsystem;
+import org.tvhsfrc.frc2020.robot.subsystems.Intake;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -23,14 +23,14 @@ import org.tvhsfrc.frc2020.robot.subsystems.ExampleSubsystem;
 public class RobotContainer {
 
     // The robot's subsystems and commands are defined here...
-    // This "defines" the example subsystem so it can be easily run from within this project
+    // This "defines" the example subsystem so it can be easily run from within this class
     private final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 
-    // This "defines" the example command so it can be easily run from within this project
+    // This "defines" the example command so it can be easily run from within this class
     private final ExampleCommand autonomousCommand = new ExampleCommand(exampleSubsystem);
 
-    // This "defines" the drive subsystem so it can be easily ran from within this project
-    private final Drive drive = new Drive();
+    // This "defines" the intake subsystem so it can be easily run from within this class
+    private final Intake intake = new Intake();
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -49,7 +49,6 @@ public class RobotContainer {
     private void configureButtonBindings() {
         
     }
-
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.

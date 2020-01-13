@@ -7,11 +7,7 @@
 
 package org.tvhsfrc.frc2020.robot;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -106,33 +102,11 @@ public class Robot extends TimedRobot {
         }
     }
 
-    // Define the joystick.
-    public Joystick stick = new Joystick(0);
-
-    // Define the talons (which control the motors) so we can access them in the future.
-    // TODO: Figure out what the actual ports/ device number
-    WPI_TalonSRX leftFrontTalon = new WPI_TalonSRX(1);
-    WPI_TalonSRX leftRearTalon = new WPI_TalonSRX(3);
-    WPI_TalonSRX rightFrontTalon = new WPI_TalonSRX(2);
-    WPI_TalonSRX rightRearTalon = new WPI_TalonSRX(4);
-
-    /**
-     * These "SpeedControllerGroups" have the two drive motors from each side in them, one for the left and one for the
-     * right. This is done because the "differentialDrive" group only takes two motors/ speedControllers.
-     */
-    SpeedControllerGroup left = new SpeedControllerGroup(leftFrontTalon, leftRearTalon);
-    SpeedControllerGroup right = new SpeedControllerGroup(rightFrontTalon, rightRearTalon);
-
-    // This is the "control group" for the drive motors.
-    DifferentialDrive drive = new DifferentialDrive(left, right);
-
     /**
      * This method is called periodically during operator control.
      */
     @Override
     public void teleopPeriodic() {
-        // This takes the raw values from the joystick and runs the drive motors accordingly
-        drive.arcadeDrive(stick.getRawAxis(1), stick.getRawAxis(2));
     }
 
     /**
