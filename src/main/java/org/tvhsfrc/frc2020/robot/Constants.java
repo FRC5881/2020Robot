@@ -17,5 +17,6 @@ package org.tvhsfrc.frc2020.robot;
  */
 public final class Constants 
 {
-    
+    // This is the
+    public static final double shooterSpeed = 1;
 }

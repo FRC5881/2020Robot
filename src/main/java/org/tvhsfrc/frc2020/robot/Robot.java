@@ -10,6 +10,7 @@ package org.tvhsfrc.frc2020.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import org.tvhsfrc.frc2020.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -21,8 +22,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot
 {
     private Command autonomousCommand;
-
-    private RobotContainer robotContainer;
+    public static RobotContainer robotContainer;
 
     /**
      * This method is run when the robot is first started up and should be used for any
@@ -92,6 +92,10 @@ public class Robot extends TimedRobot
     @Override
     public void teleopInit()
     {
+        RobotContainer.shooter.init();
+
+        RobotContainer.shooterManual.schedule();
+
         // This makes sure that the autonomous stops running when
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove

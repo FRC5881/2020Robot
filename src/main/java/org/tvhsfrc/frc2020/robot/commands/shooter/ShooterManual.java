@@ -1,15 +1,16 @@
-package org.tvhsfrc.frc2020.robot.commands;
+package org.tvhsfrc.frc2020.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.tvhsfrc.frc2020.robot.RobotContainer;
 
-public class ExampleCommand extends CommandBase {
+public class ShooterManual extends CommandBase {
     /**
      * String name of command for debugging
      */
-    private static final String CommandName = "Example";
+    private static final String CommandName = "Shooter Manual";
 
-    public ExampleCommand() {
+    public ShooterManual()
+    {
         addRequirements(RobotContainer.shooter);
     }
 
@@ -18,7 +19,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void initialize() {
-        System.out.println(CommandName + "command has been initialized!");
+        System.out.println(CommandName + "command has been initialize");
     }
 
     /**
@@ -26,7 +27,7 @@ public class ExampleCommand extends CommandBase {
      */
     @Override
     public void execute() {
-
+        RobotContainer.shooter.shootAtJoystickSpeed();
     }
 
     /**

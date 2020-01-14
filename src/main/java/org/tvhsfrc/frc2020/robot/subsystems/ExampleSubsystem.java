@@ -7,25 +7,30 @@
 
 package org.tvhsfrc.frc2020.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 
-public class ExampleSubsystem extends SubsystemBase
-{
+public class ExampleSubsystem extends SubsystemBase {
+    // Example motor
+    private WPI_TalonSRX exampleMotor = new WPI_TalonSRX(50);
+
     /**
      * Creates a new ExampleSubsystem.
      */
-    public ExampleSubsystem()
-    {
-        
-    }
-    
-    /**
-     * Will be called periodically whenever the CommandScheduler runs.
-     */
-    @Override
-    public void periodic()
-    {
+    public ExampleSubsystem() {
+        super();
 
+        init();
+    }
+
+    /**
+     * Initialize the subsystem
+     */
+    public void init() {
+        // Set up PID controllers and first time stuff here
+        exampleMotor.setName("Example Motor");
+        LiveWindow.enableTelemetry(exampleMotor);
     }
 }
