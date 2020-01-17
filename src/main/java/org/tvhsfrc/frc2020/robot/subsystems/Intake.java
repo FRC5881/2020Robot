@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import org.tvhsfrc.frc2020.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
 
@@ -24,6 +23,8 @@ public class Intake extends SubsystemBase {
 
         beltTalon.setName("Belt Talon");
         LiveWindow.enableTelemetry(beltTalon);
+
+        LiveWindow.enableTelemetry(solenoid);
     }
 
     public void IntakeRun(){
