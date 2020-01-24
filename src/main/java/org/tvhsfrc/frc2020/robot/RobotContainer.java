@@ -8,11 +8,12 @@
 package org.tvhsfrc.frc2020.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.tvhsfrc.frc2020.robot.commands.ExampleCommand;
 import org.tvhsfrc.frc2020.robot.subsystems.ExampleSubsystem;
-import org.tvhsfrc.frc2020.robot.subsystems.Intake;
+import org.tvhsfrc.frc2020.robot.subsystems.SwerveDrive;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -29,8 +30,9 @@ public class RobotContainer {
     // This "defines" the example command so it can be easily run from within this class
     private static final ExampleCommand autonomousCommand = new ExampleCommand(exampleSubsystem);
 
-    // This "defines" the intake subsystem so it can be easily run from within this class
-    public static final Intake intake = new Intake();
+    public static final SwerveDrive swerveDrive = new SwerveDrive();
+
+    public Joystick joystick = new Joystick(1);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -48,6 +50,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         // TODO: Figure out what axis type is which
+
     }
 
     /**
