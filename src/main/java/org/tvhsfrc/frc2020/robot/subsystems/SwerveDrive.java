@@ -2,13 +2,13 @@ package org.tvhsfrc.frc2020.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,22 +16,49 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import org.tvhsfrc.frc2020.robot.RobotContainer;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class SwerveDrive extends SubsystemBase {
     RobotContainer robotContainer = new RobotContainer();
 
-    private List<Trajectory.State> states = new ArrayList<Trajectory.State>();
-
-
     // TODO: Figure out what the actual values for these things are
+
+    // TODO: Set actual states, translation locations, and rotation amounts for the robot
+    // The rotation of the robot
+    private Rotation2d rotation2d2 = new Rotation2d(100);
+    // The "pose/ location and rotation" of the robot for trajectory
+    private Pose2d pose2d2 = new Pose2d(10,10,rotation2d2);
+    // The time, velocity, acceleration, pose, and curvature of the robot
+    private Trajectory.State states = new Trajectory.State(1,10,2,pose2d2,1);
+
+    // The coordinates of the robot relative to the field. Based off the x and y value of the joystick
     private Translation2d translation2d = new Translation2d(robotContainer.joystick.getX(),robotContainer.joystick.getY());
+    // The rotation of the robot relative to the field. Based off the "twist" of the joystick
     private Rotation2d rotation2d = new Rotation2d(robotContainer.joystick.getTwist());
-    private Pose2d pose2d = new Pose2d(translation2d, rotation2d);
+    // The "pose" (combined value for translation and rotation of robot)
+    private Supplier<Pose2d> pose2d = new Supplier<Pose2d>() {
+        @Override
+        public Pose2d get() {
+            return null;
+        }
+    };
+    // The maximum velocity and maximum acceleration of the robot.
     private TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(10, 5);
+
+
+    // PID for robot.
     private ProfiledPIDController profiledPIDController = new ProfiledPIDController(.8,.3,.1,constraints);
-    private Trajectory trajectory = new Trajectory(states);
+
+    ArrayList<Trajectory.State> list = new ArrayList<Trajectory.State>((Collection<? extends Trajectory.State>) states);
+    // Trajectory of robot based off of preset values
+    private Trajectory trajectory = new Trajectory(list);
+
+    private SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(translation2d);
+    //
     private PIDController pidControllerX = new PIDController(1,1,1);
     private PIDController pidControllerY = new PIDController(1,1,1);
+
+    private SwerveModuleState swerveModuleState = new SwerveModuleState(10,rotation2d);
 
     // TODO: figure out what the "channel" the sparks are on
     public CANSparkMax swerve1 = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -43,7 +70,7 @@ public class SwerveDrive extends SubsystemBase {
         super();
     }
 
-    public void SwerveBoiDrive(){
-        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory,pose2d,pidControllerX,pidControllerY,profiledPIDController);
+    public void SwerveRun(){
+        SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(trajectory,pose2d,swerveDriveKinematics,pidControllerX,pidControllerY,profiledPIDController,swerveModuleStates -> {});
     }
 }
