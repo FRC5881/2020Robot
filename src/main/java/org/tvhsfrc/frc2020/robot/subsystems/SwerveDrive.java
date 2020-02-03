@@ -36,28 +36,28 @@ public class SwerveDrive extends SubsystemBase {
     // The rotation of the robot relative to the field. Based off the "twist" of the joystick
     private Rotation2d rotation2d = new Rotation2d(robotContainer.joystick.getTwist());
     // The "pose" (combined value for translation and rotation of robot)
-    private Supplier<Pose2d> pose2d = new Supplier<Pose2d>() {
-        @Override
-        public Pose2d get() {
-            return null;
-        }
-    };
+    private Supplier<Pose2d> pose2d = () -> null;
     // The maximum velocity and maximum acceleration of the robot.
     private TrapezoidProfile.Constraints constraints = new TrapezoidProfile.Constraints(10, 5);
 
-
     // PID for robot.
     private ProfiledPIDController profiledPIDController = new ProfiledPIDController(.8,.3,.1,constraints);
+    // Array list of trajectory states
+    ArrayList<Trajectory.State> list;
 
-    ArrayList<Trajectory.State> list = new ArrayList<Trajectory.State>((Collection<? extends Trajectory.State>) states);
+    public void setList(ArrayList<Trajectory.State> list) {
+        this.list = list;
+    }
+
     // Trajectory of robot based off of preset values
     private Trajectory trajectory = new Trajectory(list);
-
+    // Swerve drive kinematics (a translation2d with the distance from the wheels to the center)
     private SwerveDriveKinematics swerveDriveKinematics = new SwerveDriveKinematics(translation2d);
-    //
+    // PID controller for x axis
     private PIDController pidControllerX = new PIDController(1,1,1);
+    // PID controller for y axis
     private PIDController pidControllerY = new PIDController(1,1,1);
-
+    // Swerve module state (speed and rotation of the robot)
     private SwerveModuleState swerveModuleState = new SwerveModuleState(10,rotation2d);
 
     // TODO: figure out what the "channel" the sparks are on
@@ -68,6 +68,7 @@ public class SwerveDrive extends SubsystemBase {
 
     public SwerveDrive() {
         super();
+        list = new ArrayList<>((Collection<? extends Trajectory.State>) states);
     }
 
     public void SwerveRun(){
