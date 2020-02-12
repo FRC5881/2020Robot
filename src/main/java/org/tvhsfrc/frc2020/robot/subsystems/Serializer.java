@@ -89,21 +89,21 @@ public class Serializer implements Subsystem {
      * Wow such command
      */
     public void intakeRun() {
+        if (serializerTripped) {
+            lastSerializer = true;
+        }
+        if (!serializerTripped) {
+            lastSerializer = false;
+        }
+        if (intakeTripped) {
+            lastIntake = true;
+        }
+        if (!intakeTripped) {
+            lastIntake = false;
+        }
         if (fuelCount == 0) {
             intakeMotor.set(1);
             serializerMotor.set(1);
-            if (serializerTripped) {
-                lastSerializer = true;
-            }
-            if (!serializerTripped) {
-                lastSerializer = false;
-            }
-            if (intakeTripped) {
-                lastIntake = true;
-            }
-            if (!intakeTripped) {
-                lastIntake = false;
-            }
             if (serializerTripped && !lastSerializer) {
                 serializerMotor.set(SERIALIZER_SPEED);
                 lastSerializer = false;
@@ -113,6 +113,8 @@ public class Serializer implements Subsystem {
         else if (fuelCount <= 4 && !serializerTripped && !intakeTripped) {
             serializerMotor.set(SERIALIZER_SPEED);
             stopSerializer();
+            lastSerializer = false;
+            lastIntake = false;
         }
         else if (fuelCount == 5) {
             stopIntake();
@@ -121,10 +123,20 @@ public class Serializer implements Subsystem {
         else if (fuelCount >= 0 && fuelCount < 5 && intakeTripped && serializerTripped) {
             stopIntake();
             serializerMotor.set(SERIALIZER_SPEED);
+            lastIntake = true;
+            lastSerializer = true;
         }
         else if (fuelCount >= 1 && fuelCount <5 && !intakeTripped && serializerTripped) {
             serializerMotor.set(SERIALIZER_SPEED);
             fuelCount ++;
+            lastIntake = false;
+            lastSerializer = true;
+        }
+        else if (fuelCount >= 0 && fuelCount <=4 && intakeTripped && !serializerTripped){
+            fuelCount ++;
+            serializerMotor.set(SERIALIZER_SPEED);
+            lastIntake = true;
+            lastSerializer = false;
         }
     }
 }
