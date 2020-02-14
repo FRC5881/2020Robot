@@ -1,6 +1,7 @@
 package org.tvhsfrc.frc2020.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 public class Serializer implements Subsystem {
@@ -24,12 +25,12 @@ public class Serializer implements Subsystem {
     private WPI_TalonSRX launcherMotor = new WPI_TalonSRX(10);
     private WPI_TalonSRX intakeMotor = new WPI_TalonSRX(11);
 
+    private DigitalInput serializerSensor = new DigitalInput(0);
+    private DigitalInput intakeSensor = new DigitalInput(1);
     /**
      * States
      */
     private int fuelCount;
-    private boolean intakeTripped;
-    private boolean serializerTripped;
     private boolean lastIntake;
     private boolean lastSerializer;
 
@@ -89,54 +90,67 @@ public class Serializer implements Subsystem {
      * Wow such command
      */
     public void intakeRun() {
-        if (serializerTripped) {
-            lastSerializer = true;
-        }
-        if (!serializerTripped) {
-            lastSerializer = false;
-        }
-        if (intakeTripped) {
-            lastIntake = true;
-        }
-        if (!intakeTripped) {
-            lastIntake = false;
-        }
         if (fuelCount == 0) {
-            intakeMotor.set(1);
-            serializerMotor.set(1);
-            if (serializerTripped && !lastSerializer) {
+            if (intakeSensor.get() && serializerSensor.get()) { // Ruh Roh Raggy
+                stopIntake();
+            } else {
+                intakeMotor.set(INTAKE_OVERRIDE_SPEED);
+            }
+            if (!serializerSensor.get() && lastSerializer) {
                 serializerMotor.set(SERIALIZER_SPEED);
-                lastSerializer = false;
-                fuelCount ++;
+                stopSerializer();
+                // 28 Degrees and Stop please
+                // Increment after
+            } else {
+                serializerMotor.set(SERIALIZER_SPEED);
             }
         }
-        else if (fuelCount <= 4 && !serializerTripped && !intakeTripped) {
+        else if (fuelCount <= 4) {
+            if (!intakeSensor.get()) {
+                if (serializerSensor.get() && !lastSerializer) {
+                    serializerMotor.set(1);
+                    // intake not tripped, serializer goes high, intake dc, serializer on
+                } else if (!serializerSensor.get() && lastSerializer) {
+                    serializerMotor.set(SERIALIZER_SPEED);
+                    stopSerializer();
+                    // Intake not tripped, serializer goes low, intake dc, serializer 28deg
+                }
+            } else if (intakeSensor.get() && !lastIntake) {
+                if (!serializerSensor.get() && lastSerializer) {
+                    serializerMotor.set(SERIALIZER_SPEED);
+                    stopSerializer();
+                    // intake goes high, serializer goes low, intake dc/on, serializer 28deg then off
+                    // 28 Degrees and Stop please
+                    // Increment After
+                } else if (serializerSensor.get()) {
+                    serializerMotor.set(SERIALIZER_SPEED);
+                    stopIntake();
+                } else if (!serializerSensor.get()) {
+                    stopSerializer(); // Assume rotation and stop completed
+                    intakeMotor.set(INTAKE_OVERRIDE_SPEED);
+                }
+            } else if (intakeSensor.get()) {
+                if (serializerSensor.get()) {
+                    // intake tripped, serializer high, intake off, serializer on
+                    stopIntake();
+                    serializerMotor.set(SERIALIZER_SPEED);
+                } else {
+                    stopSerializer();
+                }
+            }
+
             serializerMotor.set(SERIALIZER_SPEED);
             stopSerializer();
             lastSerializer = false;
             lastIntake = false;
         }
-        else if (fuelCount == 5) {
+        else if (fuelCount == 5) { // Oh no you didn't...
             stopIntake();
             stopSerializer();
         }
-        else if (fuelCount >= 0 && fuelCount < 5 && intakeTripped && serializerTripped) {
-            stopIntake();
-            serializerMotor.set(SERIALIZER_SPEED);
-            lastIntake = true;
-            lastSerializer = true;
-        }
-        else if (fuelCount >= 1 && fuelCount <5 && !intakeTripped && serializerTripped) {
-            serializerMotor.set(SERIALIZER_SPEED);
-            fuelCount ++;
-            lastIntake = false;
-            lastSerializer = true;
-        }
-        else if (fuelCount >= 0 && fuelCount <=4 && intakeTripped && !serializerTripped){
-            fuelCount ++;
-            serializerMotor.set(SERIALIZER_SPEED);
-            lastIntake = true;
-            lastSerializer = false;
-        }
+
+        // Save last state of sensors for next iteration
+        lastSerializer = serializerSensor.get();
+        lastIntake = intakeSensor.get();
     }
 }
