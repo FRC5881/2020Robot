@@ -7,8 +7,11 @@
 
 package org.tvhsfrc.frc2020.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.tvhsfrc.frc2020.robot.commands.ExampleCommand;
@@ -28,6 +31,8 @@ public class RobotContainer
     private final ExampleCommand autonomousCommand = new ExampleCommand(exampleSubsystem);
 
     private final DigitalOutput digitalOutput = new DigitalOutput(0);
+
+    private final WPI_TalonSRX testMotor = new WPI_TalonSRX(20);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
