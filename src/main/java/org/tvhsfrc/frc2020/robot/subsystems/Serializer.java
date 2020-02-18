@@ -92,17 +92,21 @@ public class Serializer implements Subsystem {
     public void intakeRun() {
         if (fuelCount == 0) {
             if (intakeSensor.get() && serializerSensor.get()) { // Ruh Roh Raggy
+                serializerMotor.set(SERIALIZER_SPEED);
                 stopIntake();
+                fuelCount++;
             } else {
-                intakeMotor.set(INTAKE_OVERRIDE_SPEED);
+                intakeMotor.set(1);
             }
             if (!serializerSensor.get() && lastSerializer) {
                 serializerMotor.set(SERIALIZER_SPEED);
+                fuelCount++;
                 stopSerializer();
                 // 28 Degrees and Stop please
                 // Increment after
             } else {
                 serializerMotor.set(SERIALIZER_SPEED);
+                fuelCount++;
             }
         }
         else if (fuelCount <= 4) {
@@ -112,18 +116,21 @@ public class Serializer implements Subsystem {
                     // intake not tripped, serializer goes high, intake dc, serializer on
                 } else if (!serializerSensor.get() && lastSerializer) {
                     serializerMotor.set(SERIALIZER_SPEED);
+                    fuelCount++;
                     stopSerializer();
                     // Intake not tripped, serializer goes low, intake dc, serializer 28deg
                 }
             } else if (intakeSensor.get() && !lastIntake) {
                 if (!serializerSensor.get() && lastSerializer) {
                     serializerMotor.set(SERIALIZER_SPEED);
+                    fuelCount++;
                     stopSerializer();
                     // intake goes high, serializer goes low, intake dc/on, serializer 28deg then off
                     // 28 Degrees and Stop please
                     // Increment After
                 } else if (serializerSensor.get()) {
                     serializerMotor.set(SERIALIZER_SPEED);
+                    fuelCount++;
                     stopIntake();
                 } else if (!serializerSensor.get()) {
                     stopSerializer(); // Assume rotation and stop completed
@@ -134,6 +141,7 @@ public class Serializer implements Subsystem {
                     // intake tripped, serializer high, intake off, serializer on
                     stopIntake();
                     serializerMotor.set(SERIALIZER_SPEED);
+                    fuelCount++;
                 } else {
                     stopSerializer();
                 }
