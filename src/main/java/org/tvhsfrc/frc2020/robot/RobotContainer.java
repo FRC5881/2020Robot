@@ -7,6 +7,9 @@
 
 package org.tvhsfrc.frc2020.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,6 +29,10 @@ public class RobotContainer
 
     private final ExampleCommand autonomousCommand = new ExampleCommand(exampleSubsystem);
 
+    private WPI_TalonSRX test = new WPI_TalonSRX(1);
+    private final AnalogInput analogInput = new AnalogInput(0);
+
+    private final DigitalInput digitalInput = new DigitalInput(0);
 
     /**
      * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -42,8 +49,7 @@ public class RobotContainer
      * edu.wpi.first.wpilibj.Joystick Joystick} or {@link XboxController}), and then passing it to a
      * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton JoystickButton}.
      */
-    private void configureButtonBindings()
-    {
+    private void configureButtonBindings() {
         
     }
 
